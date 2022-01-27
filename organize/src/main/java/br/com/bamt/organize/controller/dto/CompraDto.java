@@ -8,14 +8,20 @@ import java.time.format.DateTimeFormatter;
 
 public class CompraDto {
 
+    private String nomeEstabelecimento;
     private LocalDate dataDaCompra;
     private Double valor;
     private Estabelecimento estabelecimento;
 
     public CompraDto(Compra compra) {
+        this.nomeEstabelecimento = compra.getNomeEstabelecimento();
         this.dataDaCompra = compra.getDataDaCompra();
         this.valor = compra.getValor();
         this.estabelecimento = compra.getEstabelecimento();
+    }
+
+    public String getNomeEstabelecimento() {
+        return nomeEstabelecimento;
     }
 
     public LocalDate getDataDaCompra() {

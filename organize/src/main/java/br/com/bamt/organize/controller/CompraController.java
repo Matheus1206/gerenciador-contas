@@ -3,32 +3,33 @@ package br.com.bamt.organize.controller;
 import br.com.bamt.organize.controller.dto.CompraDto;
 import br.com.bamt.organize.controller.form.NovaContaForm;
 import br.com.bamt.organize.model.Compra;
+import br.com.bamt.organize.model.repository.CompraRepository;
+import org.apache.tomcat.jni.Local;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "compra", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CompraController {
 
-    @PersistenceContext
-    private EntityManager manager;
+    @Autowired
+    private CompraRepository compraRepository;
 
     @PostMapping("nova")
-    @Transactional
     public CompraDto novaCompra(@RequestBody NovaContaForm novaContaForm){
         Compra compra = novaContaForm.toCompra();
-        manager.persist(compra);
+        compraRepository.save(compra);
         return new CompraDto(compra);
     }
 
-
-
+    @GetMapping("/pesquisaData")
+    public List<Compra> pesquisaPorData(@RequestParam(name = "data") String data){
+        List<Compra> lista = compraRepository.findByDataDaCompra(LocalDate.parse(data));
+        return lista;
+    }
 
 }

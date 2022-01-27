@@ -9,6 +9,7 @@ public class Compra {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String nomeEstabelecimento;
     private LocalDate dataDaCompra;
     private Double valor;
     @Enumerated(EnumType.STRING)
@@ -18,7 +19,8 @@ public class Compra {
     @Deprecated
     public Compra(){}
 
-    public Compra(LocalDate dataDaCompra, Double valor, Estabelecimento estabelecimento, Boolean parcelado) {
+    public Compra(String nomeEstabelecimento, LocalDate dataDaCompra, Double valor, Estabelecimento estabelecimento, Boolean parcelado) {
+        this.nomeEstabelecimento = nomeEstabelecimento;
         this.dataDaCompra = dataDaCompra;
         this.valor = valor;
         this.estabelecimento = estabelecimento;
@@ -55,5 +57,13 @@ public class Compra {
 
     public void setParcelado(Boolean parcelado) {
         this.parcelado = parcelado;
+    }
+
+    public String getNomeEstabelecimento() {
+        return nomeEstabelecimento;
+    }
+
+    public void setNomeEstabelecimento(String nomeEstabelecimento) {
+        this.nomeEstabelecimento = nomeEstabelecimento;
     }
 }

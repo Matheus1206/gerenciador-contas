@@ -10,14 +10,13 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.Locale;
 import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "compra", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CompraController {
-
-    //IMPLEMENTAR SWAGGER
-
+    
     @Autowired
     private CompraRepository compraRepository;
 
@@ -31,10 +30,10 @@ public class CompraController {
     @PostMapping("edita")
     public CompraResponse editaCompra(@RequestBody NovaContaForm novaContaForm, @RequestParam Long id){
         Optional<Compra> compra = compraRepository.findById(id);
-        
+
         //NECESSITA ALTERAR COMO ESSE MÉTODO FOI FEITO, POIS ELE NÃO ESTÁ PERFOMÁTICO
         compra.get().setDataDaCompra(LocalDate.parse(novaContaForm.getDataDaCompra()));
-        compra.get().setEstabelecimento(Estabelecimento.valueOf(novaContaForm.getEstabelecimento()));
+        compra.get().setEstabelecimento(Estabelecimento.valueOf(novaContaForm.getEstabelecimento().toUpperCase(Locale.ROOT)));
         compra.get().setParcelado(novaContaForm.getParcelado());
         compra.get().setValor(novaContaForm.getValor());
         compra.get().setNomeEstabelecimento(novaContaForm.getNomeEstabelecimento());
@@ -42,7 +41,13 @@ public class CompraController {
         return compraResponse;
     }
 
-    // IMPLEMENTAR MÉTODO DELETAR
+    @PostMapping("deleta")
+    public String deletaCompra(@RequestParam Long id){
+        Optional<Compra> compra = compraRepository.findById(id);
+        String nomeDaCompra = compra.get().getNomeEstabelecimento();
+        compraRepository.delete(compra.get());
+        return "A compra" + nomeDaCompra + "foi excluída com sucesso";
+    }
 
     
 }

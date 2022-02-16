@@ -43,6 +43,6 @@ public class NovaContaForm {
     }
 
     public Compra toCompra() {
-        return new Compra(nomeEstabelecimento, LocalDate.parse(dataDaCompra), valor, Estabelecimento.valueOf(estabelecimento.toUpperCase(Locale.ROOT)), parcelado);
+        return new Compra(nomeEstabelecimento.toLowerCase(Locale.ROOT), LocalDate.parse(dataDaCompra), valor, Estabelecimento.valueOf(estabelecimento.toUpperCase(Locale.ROOT)), parcelado);
     }
 }

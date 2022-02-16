@@ -1,19 +1,18 @@
-package br.com.bamt.organize.controller.dto;
+package br.com.bamt.organize.controller.response;
 
 import br.com.bamt.organize.model.Compra;
 import br.com.bamt.organize.model.Estabelecimento;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
-public class CompraDto {
+public class CompraResponse {
 
     private String nomeEstabelecimento;
     private LocalDate dataDaCompra;
     private Double valor;
     private Estabelecimento estabelecimento;
 
-    public CompraDto(Compra compra) {
+    public CompraResponse(Compra compra) {
         this.nomeEstabelecimento = compra.getNomeEstabelecimento();
         this.dataDaCompra = compra.getDataDaCompra();
         this.valor = compra.getValor();

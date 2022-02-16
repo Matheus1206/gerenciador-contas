@@ -1,6 +1,7 @@
 package br.com.bamt.organize.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Null;
 import java.time.LocalDate;
 
 @Entity

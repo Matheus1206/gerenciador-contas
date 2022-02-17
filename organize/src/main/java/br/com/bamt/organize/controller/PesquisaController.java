@@ -1,5 +1,6 @@
 package br.com.bamt.organize.controller;
 
+import br.com.bamt.organize.controller.response.CompraResponse;
 import br.com.bamt.organize.model.Compra;
 import br.com.bamt.organize.model.Estabelecimento;
 import br.com.bamt.organize.model.repository.CompraRepository;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "pesquisa", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -24,26 +26,26 @@ public class PesquisaController {
     private List<Compra> lista;
 
     @GetMapping("/data")
-    public List<Compra> pesquisaPorData(@RequestParam(name = "data") String data){
+    public List<CompraResponse> pesquisaPorData(@RequestParam(name = "data") String data){
         lista = compraRepository.findByDataDaCompra(LocalDate.parse(data));
-        return lista;
+        return lista.stream().map(CompraResponse::new).collect(Collectors.toList());
     }
 
     @GetMapping("/estabelecimento")
-    public List<Compra> pesquisaPorEstabelecimento(@RequestParam(name = "estabelecimento") String estabelecimento){
+    public List<CompraResponse> pesquisaPorEstabelecimento(@RequestParam(name = "estabelecimento") String estabelecimento){
         lista = compraRepository.findByNomeEstabelecimento(estabelecimento.toLowerCase(Locale.ROOT));
-        return lista;
+        return lista.stream().map(CompraResponse::new).collect(Collectors.toList());
     }
 
     @GetMapping("/tipoEstabelecimento")
-    public List<Compra> pesquisaPorTipoEstabelecimento(@RequestParam(name = "tipoEstabelecimento") String tipoEstabelecimento){
+    public List<CompraResponse> pesquisaPorTipoEstabelecimento(@RequestParam(name = "tipoEstabelecimento") String tipoEstabelecimento){
         lista = compraRepository.findByEstabelecimento(Estabelecimento.valueOf(tipoEstabelecimento.toUpperCase(Locale.ROOT)));
-        return lista;
+        return lista.stream().map(CompraResponse::new).collect(Collectors.toList());
     }
 
     @GetMapping("/todas")
-    public List<Compra> pesquisaTodasCompras(){
+    public List<CompraResponse> pesquisaTodasCompras(){
         lista = compraRepository.findAll();
-        return lista;
+        return lista.stream().map(CompraResponse::new).collect(Collectors.toList());
     }
 }

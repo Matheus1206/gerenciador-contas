@@ -16,7 +16,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping(value = "compra", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CompraController {
-    
+
     @Autowired
     private CompraRepository compraRepository;
 
@@ -38,6 +38,7 @@ public class CompraController {
         compra.get().setValor(novaContaForm.getValor());
         compra.get().setNomeEstabelecimento(novaContaForm.getNomeEstabelecimento());
         CompraResponse compraResponse = new CompraResponse(compra.get());
+        compraRepository.save(compra.get());
         return compraResponse;
     }
 

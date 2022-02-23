@@ -1,6 +1,6 @@
 package br.com.bamt.organize.controller;
 
-import br.com.bamt.organize.controller.response.CompraResponse;
+import br.com.bamt.organize.controller.dto.CompraDto;
 import br.com.bamt.organize.controller.form.NovaContaForm;
 import br.com.bamt.organize.model.Compra;
 import br.com.bamt.organize.model.Estabelecimento;
@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.Locale;
 import java.util.Optional;
@@ -21,14 +22,14 @@ public class CompraController {
     private CompraRepository compraRepository;
 
     @PostMapping("nova")
-    public CompraResponse novaCompra(@RequestBody NovaContaForm novaContaForm){
+    public CompraDto novaCompra(@RequestBody @Valid NovaContaForm novaContaForm){
         Compra compra = novaContaForm.toCompra();
         compraRepository.save(compra);
-        return new CompraResponse(compra);
+        return new CompraDto(compra);
     }
 
     @PostMapping("edita")
-    public CompraResponse editaCompra(@RequestBody NovaContaForm novaContaForm, @RequestParam Long id){
+    public CompraDto editaCompra(@RequestBody NovaContaForm novaContaForm, @RequestParam Long id){
         Optional<Compra> compra = compraRepository.findById(id);
 
         //NECESSITA ALTERAR COMO ESSE MÉTODO FOI FEITO, POIS ELE NÃO ESTÁ PERFOMÁTICO
@@ -37,9 +38,9 @@ public class CompraController {
         compra.get().setParcelado(novaContaForm.getParcelado());
         compra.get().setValor(novaContaForm.getValor());
         compra.get().setNomeEstabelecimento(novaContaForm.getNomeEstabelecimento());
-        CompraResponse compraResponse = new CompraResponse(compra.get());
+        CompraDto compraDto = new CompraDto(compra.get());
         compraRepository.save(compra.get());
-        return compraResponse;
+        return compraDto;
     }
 
     @PostMapping("deleta")

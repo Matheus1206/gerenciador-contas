@@ -1,4 +1,4 @@
-package br.com.bamt.organize.controller.config;
+package br.com.bamt.organize.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

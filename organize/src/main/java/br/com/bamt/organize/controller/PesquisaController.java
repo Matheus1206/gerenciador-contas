@@ -6,10 +6,7 @@ import br.com.bamt.organize.model.Estabelecimento;
 import br.com.bamt.organize.model.repository.CompraRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -25,20 +22,20 @@ public class PesquisaController {
 
     private List<Compra> lista;
 
-    @GetMapping("/data")
-    public List<CompraDto> pesquisaPorData(@RequestParam(name = "data") String data){
+    @GetMapping("/data/{data}")
+    public List<CompraDto> pesquisaPorData(@PathVariable String data){
         lista = compraRepository.findByDataDaCompra(LocalDate.parse(data));
         return lista.stream().map(CompraDto::new).collect(Collectors.toList());
     }
 
-    @GetMapping("/estabelecimento")
-    public List<CompraDto> pesquisaPorEstabelecimento(@RequestParam(name = "estabelecimento") String estabelecimento){
+    @GetMapping("/estabelecimento/{estabelecimento}")
+    public List<CompraDto> pesquisaPorEstabelecimento(@PathVariable String estabelecimento){
         lista = compraRepository.findByNomeEstabelecimento(estabelecimento.toLowerCase(Locale.ROOT));
         return lista.stream().map(CompraDto::new).collect(Collectors.toList());
     }
 
-    @GetMapping("/tipoEstabelecimento")
-    public List<CompraDto> pesquisaPorTipoEstabelecimento(@RequestParam(name = "tipoEstabelecimento") String tipoEstabelecimento){
+    @GetMapping("/tipoEstabelecimento/{tipoEstabelecimento}")
+    public List<CompraDto> pesquisaPorTipoEstabelecimento(@PathVariable String tipoEstabelecimento){
         lista = compraRepository.findByEstabelecimento(Estabelecimento.valueOf(tipoEstabelecimento.toUpperCase(Locale.ROOT)));
         return lista.stream().map(CompraDto::new).collect(Collectors.toList());
     }

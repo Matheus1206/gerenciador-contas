@@ -1,4 +1,4 @@
-package br.com.bamt.organize.controller.config.validation;
+package br.com.bamt.organize.config.validation;
 
 public class ErroFormularioCompraDto {
 

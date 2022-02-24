@@ -7,6 +7,7 @@ import br.com.bamt.organize.model.Estabelecimento;
 import br.com.bamt.organize.model.repository.CompraRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,29 +23,23 @@ public class CompraController {
     private CompraRepository compraRepository;
 
     @PostMapping("nova")
+    @Transactional
     public CompraDto novaCompra(@RequestBody @Valid NovaContaForm novaContaForm){
         Compra compra = novaContaForm.toCompra();
         compraRepository.save(compra);
         return new CompraDto(compra);
     }
 
-    @PostMapping("edita")
-    public CompraDto editaCompra(@RequestBody NovaContaForm novaContaForm, @RequestParam Long id){
-        Optional<Compra> compra = compraRepository.findById(id);
-
-        //NECESSITA ALTERAR COMO ESSE MÉTODO FOI FEITO, POIS ELE NÃO ESTÁ PERFOMÁTICO
-        compra.get().setDataDaCompra(LocalDate.parse(novaContaForm.getDataDaCompra()));
-        compra.get().setEstabelecimento(Estabelecimento.valueOf(novaContaForm.getEstabelecimento().toUpperCase(Locale.ROOT)));
-        compra.get().setParcelado(novaContaForm.getParcelado());
-        compra.get().setValor(novaContaForm.getValor());
-        compra.get().setNomeEstabelecimento(novaContaForm.getNomeEstabelecimento());
-        CompraDto compraDto = new CompraDto(compra.get());
-        compraRepository.save(compra.get());
-        return compraDto;
+    @PostMapping("edita/{id}")
+    @Transactional
+    public CompraDto editaCompra(@RequestBody @Valid NovaContaForm novaContaForm, @PathVariable Long id){
+        CompraDto compra = novaContaForm.atualizar(id, compraRepository);
+        return compra;
     }
 
-    @PostMapping("deleta")
-    public String deletaCompra(@RequestParam Long id){
+    @PostMapping("deleta/{id}")
+    @Transactional
+    public String deletaCompra(@PathVariable Long id){
         Optional<Compra> compra = compraRepository.findById(id);
         String nomeDaCompra = compra.get().getNomeEstabelecimento();
         compraRepository.delete(compra.get());

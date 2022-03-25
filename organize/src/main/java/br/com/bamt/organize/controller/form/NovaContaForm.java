@@ -1,16 +1,13 @@
 package br.com.bamt.organize.controller.form;
 
-import br.com.bamt.organize.controller.dto.CompraDto;
 import br.com.bamt.organize.model.Compra;
 import br.com.bamt.organize.model.Estabelecimento;
-import br.com.bamt.organize.model.repository.CompraRepository;
-
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Locale;
-import java.util.Optional;
+
 
 public class NovaContaForm {
 
@@ -58,13 +55,14 @@ public class NovaContaForm {
         return new Compra(nomeEstabelecimento.toLowerCase(Locale.ROOT), LocalDate.parse(dataDaCompra), valor, Estabelecimento.valueOf(estabelecimento.toUpperCase(Locale.ROOT)), parcelado);
     }
 
-    public CompraDto atualizar(Long id, CompraRepository compraRepository) {
-        Optional<Compra> compra = compraRepository.findById(id);
-        compra.get().setNomeEstabelecimento(this.getNomeEstabelecimento());
-        compra.get().setDataDaCompra(LocalDate.parse(this.getDataDaCompra()));
-        compra.get().setValor(this.getValor());
-        compra.get().setEstabelecimento(Estabelecimento.valueOf(this.getEstabelecimento().toUpperCase()));
-        compra.get().setParcelado(this.getParcelado());
-        return new CompraDto(compra.get());
+    @Override
+    public String toString() {
+        return "NovaContaForm{" +
+                "nomeEstabelecimento='" + nomeEstabelecimento + '\'' +
+                ", dataDaCompra='" + dataDaCompra + '\'' +
+                ", valor=" + valor +
+                ", estabelecimento='" + estabelecimento + '\'' +
+                ", parcelado=" + parcelado +
+                '}';
     }
 }

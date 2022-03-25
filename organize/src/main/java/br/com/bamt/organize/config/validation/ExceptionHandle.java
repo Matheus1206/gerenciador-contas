@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestControllerAdvice
 public class ExceptionHandle {
@@ -30,9 +31,12 @@ public class ExceptionHandle {
             String mensagem = messageSource.getMessage(e, LocaleContextHolder.getLocale());
             dto.add(new ErroFormularioCompraDto(e.getField(), mensagem));
         });
-
         return dto;
     }
 
-
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NoSuchElementException.class)
+    public ErroNenhumElementoDto handle (NoSuchElementException exception){
+        return new ErroNenhumElementoDto(exception.getMessage());
+    }
 }

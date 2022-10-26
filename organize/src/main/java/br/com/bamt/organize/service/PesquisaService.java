@@ -5,6 +5,7 @@ import br.com.bamt.organize.model.Compra;
 import br.com.bamt.organize.model.Estabelecimento;
 import br.com.bamt.organize.model.repository.CompraRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -20,23 +21,32 @@ public class PesquisaService {
 
     private List<Compra> lista;
 
-    public List<CompraDto> pesquisarPorData(String data){
+    public ResponseEntity<List<CompraDto>> pesquisarPorData(String data) {
         lista = compraRepository.findByDataDaCompra(LocalDate.parse(data));
-        return lista.stream().map(CompraDto::new).collect(Collectors.toList());
+        return verificaRetornoVazioDePesquisaNoBanco(lista);
     }
 
-    public List<CompraDto> pesquisarPorEstabelecimento(String estabelecimento) {
+    public ResponseEntity<List<CompraDto>> pesquisarPorEstabelecimento(String estabelecimento) {
         lista = compraRepository.findByNomeEstabelecimento(estabelecimento.toLowerCase(Locale.ROOT));
-        return lista.stream().map(CompraDto::new).collect(Collectors.toList());
+        return verificaRetornoVazioDePesquisaNoBanco(lista);
     }
 
-    public List<CompraDto> pesquisarPorTipoEstabelecimento(String tipoEstabelecimento) {
+    public ResponseEntity<List<CompraDto>> pesquisarPorTipoEstabelecimento(String tipoEstabelecimento) {
         lista = compraRepository.findByEstabelecimento(Estabelecimento.valueOf(tipoEstabelecimento.toUpperCase(Locale.ROOT)));
-        return lista.stream().map(CompraDto::new).collect(Collectors.toList());
+        return verificaRetornoVazioDePesquisaNoBanco(lista);
     }
 
-    public List<CompraDto> pesquisarTodasAsCompras() {
+    public ResponseEntity<List<CompraDto>> pesquisarTodasAsCompras() {
         lista = compraRepository.findAll();
-        return lista.stream().map(CompraDto::new).collect(Collectors.toList());
+        return verificaRetornoVazioDePesquisaNoBanco(lista);
+    }
+
+    //MÉTODO UTILIZADO PARA VERIFICAR SE A BUSCA NO BANCO ESTÁ EM BRANCA/VAZIA, E REALIZANDO O DIRECIONAMENTO PARA 404
+    private ResponseEntity<List<CompraDto>> verificaRetornoVazioDePesquisaNoBanco(List<Compra> listaPesquisada){
+        if(listaPesquisada.isEmpty()){
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(listaPesquisada.stream().map(CompraDto::new).collect(Collectors.toList()));
+        }
     }
 }

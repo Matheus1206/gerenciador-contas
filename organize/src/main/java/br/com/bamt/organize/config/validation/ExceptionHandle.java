@@ -22,11 +22,9 @@ public class ExceptionHandle {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public List<ErroFormularioCompraDto> handle (MethodArgumentNotValidException exception){
-
+    public List<ErroFormularioCompraDto> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception){
         List<FieldError> erros =  exception.getBindingResult().getFieldErrors();
         List<ErroFormularioCompraDto> dto = new ArrayList<>();
-
         erros.forEach(e ->{
             String mensagem = messageSource.getMessage(e, LocaleContextHolder.getLocale());
             dto.add(new ErroFormularioCompraDto(e.getField(), mensagem));
@@ -36,7 +34,13 @@ public class ExceptionHandle {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NoSuchElementException.class)
-    public ErroNenhumElementoDto handle (NoSuchElementException exception){
+    public ErroNenhumElementoDto handleNoSuchElementException (NoSuchElementException exception){
+        return new ErroNenhumElementoDto(exception.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ErroNenhumElementoDto handleIllegalArgumentException (IllegalArgumentException exception){
         return new ErroNenhumElementoDto(exception.getMessage());
     }
 }

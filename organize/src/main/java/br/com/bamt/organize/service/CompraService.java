@@ -6,6 +6,7 @@ import br.com.bamt.organize.model.Compra;
 import br.com.bamt.organize.model.Estabelecimento;
 import br.com.bamt.organize.model.repository.CompraRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -17,21 +18,28 @@ public class CompraService {
     @Autowired
     private CompraRepository compraRepository;
 
-    public CompraDto salvaCompra(NovaContaForm novaContaForm) {
+    public ResponseEntity<CompraDto> salvaCompra(NovaContaForm novaContaForm) {
         Compra compra = novaContaForm.toCompra();
-        System.out.println("SALVA" + novaContaForm.toString());
         compraRepository.save(compra);
-        return new CompraDto(compra);
+        return ResponseEntity.ok(new CompraDto(compra));
     }
 
-    public CompraDto editaCompra(NovaContaForm novaContaForm, Long id) {
+    public ResponseEntity<CompraDto> editaCompra(NovaContaForm novaContaForm, Long id) {
         Optional<Compra> compra = compraRepository.findById(id);
         compra.get().setNomeEstabelecimento(novaContaForm.getNomeEstabelecimento());
         compra.get().setDataDaCompra(LocalDate.parse(novaContaForm.getDataDaCompra()));
         compra.get().setValor(novaContaForm.getValor());
         compra.get().setEstabelecimento(Estabelecimento.valueOf(novaContaForm.getEstabelecimento().toUpperCase()));
         compra.get().setParcelado(novaContaForm.getParcelado());
-        System.out.println("EDITA:" + novaContaForm.toString());
-        return new CompraDto(compra.get());
+        return ResponseEntity.ok(new CompraDto(compra.get()));
+    }
+
+    public ResponseEntity<Compra> deletaCompra(Long id) {
+        Optional<Compra> compra = compraRepository.findById(id);
+        if(compra.isPresent()){
+            compraRepository.delete(compra.get());
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }

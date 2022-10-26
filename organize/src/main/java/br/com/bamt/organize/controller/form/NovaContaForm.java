@@ -2,17 +2,17 @@ package br.com.bamt.organize.controller.form;
 
 import br.com.bamt.organize.model.Compra;
 import br.com.bamt.organize.model.Estabelecimento;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 
 public class NovaContaForm {
 
-    @NotBlank
+    @NotBlank(message = "Nome do estabelecimento não pode estar em branco")
     private String nomeEstabelecimento;
     @NotBlank
     private String dataDaCompra;

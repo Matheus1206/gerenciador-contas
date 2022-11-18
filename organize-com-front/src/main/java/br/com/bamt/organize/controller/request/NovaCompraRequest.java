@@ -7,6 +7,8 @@ import java.time.LocalDate;
 
 public class NovaCompraRequest {
 
+    private String idCompra;
+
     @NotBlank
     private String nomeEstabelecimentoCompra;
     @NotBlank
@@ -15,6 +17,14 @@ public class NovaCompraRequest {
     private String valorCompra;
     @NotBlank
     private String tipoEstabelecimentoCompra;
+
+    public String getId() {
+        return idCompra;
+    }
+
+    public void setIdCompra(String idCompra) {
+        this.idCompra = idCompra;
+    }
 
     public String getNomeEstabelecimentoCompra() {
         return nomeEstabelecimentoCompra;

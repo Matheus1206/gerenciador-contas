@@ -18,7 +18,6 @@ public class CompraController {
     @Autowired
     private CompraService compraService;
 
-
     @GetMapping()
     public String novaCompra(){
         return "nova-compra";
@@ -37,5 +36,27 @@ public class CompraController {
         model.addAttribute("compras", compras);
         return "lista-compra";
     }
+
+    @GetMapping("excluir/{id}")
+    public String excluirCompra(@PathVariable String id){
+        compraService.excluirCompra(Long.parseLong(id));
+        return "forward:/compra/listar";
+
+    }
+
+    @GetMapping("editar/{id}")
+    public String pegaInformacoesDaCompraParaEditar(@PathVariable String id, Model model){
+        Compra compra = compraService.procuraComprPeloId(Long.parseLong(id));
+        model.addAttribute(compra);
+        return "editar-compra";
+    }
+
+    @PostMapping("editar")
+    public String editarCompra(@Valid NovaCompraRequest novaCompraRequest, Model model){
+        compraService.editarCompra(novaCompraRequest);
+        return "redirect:listar";
+    }
+
+
 
 }

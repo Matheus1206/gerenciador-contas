@@ -23,7 +23,8 @@
                 <td th:text="${compra.dataCompra}"></td>
                 <td th:text="${compra.valorCompra}"></td>
                 <td th:text="${compra.tipoEstabelecimentoCompra}"></td>
-            <td></td>
+                <td><a th:href="@{'excluir/' + ${compra.id}}">excluir</a>
+                <td><a th:href="@{'editar/' + ${compra.id}}">editar</a></td>
         </tr>
     </tbody>
 </table>

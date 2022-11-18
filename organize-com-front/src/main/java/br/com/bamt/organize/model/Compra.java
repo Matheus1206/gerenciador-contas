@@ -26,6 +26,10 @@ public class Compra {
         this.tipoEstabelecimentoCompra = tipoEstabelecimentoCompra;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getNomeEstabelecimentoCompra() {
         return nomeEstabelecimentoCompra;
     }
